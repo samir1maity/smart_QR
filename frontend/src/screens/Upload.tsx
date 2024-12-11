@@ -47,9 +47,10 @@ export function UploadPage() {
             Upload Image & Generate QR Code
           </h1>
 
-          <div className="mb-8">
+          {/* Comment toggle button for now */}
+          {/* <div className="mb-8">
             <UploadToggle mode={uploadMode} onModeChange={setUploadMode} />
-          </div>
+          </div> */}
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
             <div className="space-y-6">
