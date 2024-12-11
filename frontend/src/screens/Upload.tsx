@@ -6,6 +6,7 @@ import { UrlInput } from "../components/upload/URLInput";
 import { UploadToggle } from "../components/upload/UploadToggle";
 import { Button } from "../components/ui/Button";
 import { Download, Share2 } from "lucide-react";
+import axios from "axios";
 
 export function UploadPage() {
   const [uploadMode, setUploadMode] = useState<"image" | "url">("image");
@@ -20,9 +21,17 @@ export function UploadPage() {
     setQrCodeUrl(url);
   };
 
-  const handleUrlSubmit = (url: string) => {
-    setPreviewUrl(url);
-    setQrCodeUrl(url);
+  const handleUrlSubmit = async (url: string) => {
+    try {
+      const response = await axios.post("http://localhost:5000/generate", {
+        data: url,
+      });
+      console.log("response", response);
+      setPreviewUrl(url);
+      setQrCodeUrl(response.data.qrCode);
+    } catch (error) {
+      alert("Failed to generate QR code");
+    }
   };
 
   return (
@@ -52,7 +61,8 @@ export function UploadPage() {
                     animate={{ opacity: 1, x: 0 }}
                     exit={{ opacity: 0, x: 20 }}
                   >
-                    <Dropzone onFileSelect={handleFileSelect} />
+                    {/* <Dropzone onFileSelect={handleFileSelect} /> */}
+                    Coming soon...
                   </motion.div>
                 ) : (
                   <motion.div
@@ -89,12 +99,13 @@ export function UploadPage() {
                   className="p-6 bg-white dark:bg-gray-700 rounded-lg shadow-sm space-y-4"
                 >
                   <div className="flex justify-center">
-                    <QRCodeCanvas
+                    {/* <QRCodeCanvas
                       value={qrCodeUrl}
                       size={200}
                       level="H"
                       includeMargin
-                    />
+                    /> */}
+                    <img src={qrCodeUrl} />
                   </div>
                   <div className="flex gap-4">
                     <Button className="flex-1">
