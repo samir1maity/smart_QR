@@ -1,15 +1,20 @@
 
-import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
-import Home from "./components/Home";
-// import Display from "./components/Display";
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { Navbar } from './components/layout/Navbar';
+import { HomePage } from './screens/Homepage';
+
 
 function App() {
   return (
     <Router>
-      <Routes>
-        <Route path="/" element={<Home />} />
-        {/* <Route path="/display" element={<Display />} /> */}
-      </Routes>
+      <div className="min-h-screen bg-white dark:bg-gray-900">
+        <Navbar />
+        <main className="pt-16">
+          <Routes>
+            <Route path="/" element={<HomePage />} />
+          </Routes>
+        </main>
+      </div>
     </Router>
   );
 }
