@@ -21,13 +21,6 @@ export function UrlInput({ onUrlSubmit }: UrlInputProps) {
     }
   };
 
-  /**
-   *  ##### V1 ####
-   * write image upload logic here and call the api here
-   * 1. write the api
-   * 2. generated qr show here
-   * 3. provide download and share button
-   */
 
   return (
     <motion.form

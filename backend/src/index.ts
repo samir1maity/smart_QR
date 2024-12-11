@@ -6,24 +6,27 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 
-
 app.post("/generate", async (req: Request, res: Response): Promise<void> => {
   const { data } = req.body;
 
   if (!data) {
     res.status(400).send({ error: "Data is required" });
   }
-console.log('data', data)
+  console.log("data", data);
   const url = `http://localhost:3000/display?data=${encodeURIComponent(data)}`;
 
   try {
     const qrCode = await QRCode.toDataURL(data);
-    console.log('qrCode', qrCode)
+    console.log("qrCode", qrCode);
     res.send({ qrCode });
   } catch (err) {
     console.error(err);
     res.status(500).send({ error: "Failed to generate QR code" });
   }
+});
+
+app.get("/", async (req: Request, res: Response) => {
+  res.send("you hit the entry endpoint")
 });
 
 app.listen(5000, () => console.log("Server running on http://localhost:5000"));

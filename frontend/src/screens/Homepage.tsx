@@ -7,8 +7,6 @@ import {
   QrCode,
   ArrowRight,
   Shield,
-  Zap,
-  Users,
   ChevronRight,
   Sparkles,
   Globe,

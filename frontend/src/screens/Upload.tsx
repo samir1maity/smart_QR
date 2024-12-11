@@ -1,25 +1,24 @@
 import { useState } from "react";
-import { QRCodeCanvas } from "qrcode.react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Dropzone } from "../components/upload/DropZone";
+// import { Dropzone } from "../components/upload/DropZone";
 import { UrlInput } from "../components/upload/URLInput";
-import { UploadToggle } from "../components/upload/UploadToggle";
+// import { UploadToggle } from "../components/upload/UploadToggle";
 import { Button } from "../components/ui/Button";
 import { Download, Share2 } from "lucide-react";
 import axios from "axios";
 
 export function UploadPage() {
-  const [uploadMode, setUploadMode] = useState<"image" | "url">("image");
-  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [uploadMode] = useState<"image" | "url">("url");
+  // const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const [qrCodeUrl, setQrCodeUrl] = useState<string | null>(null);
 
-  const handleFileSelect = (file: File) => {
-    setSelectedFile(file);
-    const url = URL.createObjectURL(file);
-    setPreviewUrl(url);
-    setQrCodeUrl(url);
-  };
+  // const handleFileSelect = (file: File) => {
+  //   setSelectedFile(file);
+  //   const url = URL.createObjectURL(file);
+  //   setPreviewUrl(url);
+  //   setQrCodeUrl(url);
+  // };
 
   const handleUrlSubmit = async (url: string) => {
     try {
