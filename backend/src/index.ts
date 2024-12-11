@@ -1,6 +1,3 @@
-// const cors = require("cors");
-// const QRCode = require("qrcode");
-
 import express, { Request, Response } from "express";
 import cors from "cors";
 import QRCode from "qrcode";
@@ -9,13 +6,23 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 
-app.post("/generate", async (req: Request, res: Response) => {
+
+app.post("/generate", async (req: Request, res: Response): Promise<void> => {
   const { data } = req.body;
+
+  if (!data) {
+    res.status(400).send({ error: "Data is required" });
+  }
+console.log('data', data)
+  const url = `http://localhost:3000/display?data=${encodeURIComponent(data)}`;
+
   try {
-    const qrCode = await QRCode.toDataURL(JSON.stringify(data));
-    res.send(qrCode);
+    const qrCode = await QRCode.toDataURL(data);
+    console.log('qrCode', qrCode)
+    res.send({ qrCode });
   } catch (err) {
-    res.status(500).send("Error generating QR Code");
+    console.error(err);
+    res.status(500).send({ error: "Failed to generate QR code" });
   }
 });
 

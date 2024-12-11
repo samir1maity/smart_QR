@@ -12,22 +12,27 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-// const express = require('express');
-const bodyParser = require("body-parser");
-const cors = require("cors");
-const QRCode = require("qrcode");
 const express_1 = __importDefault(require("express"));
+const cors_1 = __importDefault(require("cors"));
+const qrcode_1 = __importDefault(require("qrcode"));
 const app = (0, express_1.default)();
 app.use(express_1.default.json());
-app.use(cors());
+app.use((0, cors_1.default)());
 app.post("/generate", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { data } = req.body;
+    if (!data) {
+        res.status(400).send({ error: "Data is required" });
+    }
+    console.log('data', data);
+    const url = `http://localhost:3000/display?data=${encodeURIComponent(data)}`;
     try {
-        const qrCodeData = yield QRCode.toDataURL(JSON.stringify(data));
-        res.json({ qrCode: qrCodeData });
+        const qrCode = yield qrcode_1.default.toDataURL(data);
+        console.log('qrCode', qrCode);
+        res.send({ qrCode });
     }
     catch (err) {
-        res.status(500).send("Error generating QR Code");
+        console.error(err);
+        res.status(500).send({ error: "Failed to generate QR code" });
     }
 }));
 app.listen(5000, () => console.log("Server running on http://localhost:5000"));
