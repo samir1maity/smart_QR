@@ -49,13 +49,13 @@ export function HomePage() {
             </p>
 
             <div className="mt-8 max-w-md mx-auto sm:flex sm:justify-center md:mt-12 gap-4">
-              <Link to="/signup">
-                <Button size="lg" className="w-full sm:w-auto group">
+              <Link to="/upload">
+                <Button size="lg" variant="secondary" className="w-full sm:w-auto group">
                   Get Started Free
                   <ChevronRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
                 </Button>
               </Link>
-              <Link to="/examples">
+              <Link to='/'>
                 <Button size="lg" variant="outline" className="w-full sm:w-auto mt-4 sm:mt-0">
                   View Examples
                 </Button>

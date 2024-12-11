@@ -1,11 +1,14 @@
-import { useState } from 'react';
-import { QRCodeCanvas } from 'qrcode.react';
-import { motion } from 'framer-motion';
-import { Dropzone } from '../components/upload/DropZone';
-import { Button } from '../components/ui/Button';
-import { Download, Share2 } from 'lucide-react';
+import { useState } from "react";
+import { QRCodeCanvas } from "qrcode.react";
+import { motion, AnimatePresence } from "framer-motion";
+import { Dropzone } from "../components/upload/DropZone";
+import { UrlInput } from "../components/upload/URLInput";
+import { UploadToggle } from "../components/upload/UploadToggle";
+import { Button } from "../components/ui/Button";
+import { Download, Share2 } from "lucide-react";
 
 export function UploadPage() {
+  const [uploadMode, setUploadMode] = useState<"image" | "url">("image");
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const [qrCodeUrl, setQrCodeUrl] = useState<string | null>(null);
@@ -14,7 +17,11 @@ export function UploadPage() {
     setSelectedFile(file);
     const url = URL.createObjectURL(file);
     setPreviewUrl(url);
-    // In a real app, you would upload the file to a server and get a permanent URL
+    setQrCodeUrl(url);
+  };
+
+  const handleUrlSubmit = (url: string) => {
+    setPreviewUrl(url);
     setQrCodeUrl(url);
   };
 
@@ -31,9 +38,34 @@ export function UploadPage() {
             Upload Image & Generate QR Code
           </h1>
 
+          <div className="mb-8">
+            <UploadToggle mode={uploadMode} onModeChange={setUploadMode} />
+          </div>
+
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
             <div className="space-y-6">
-              <Dropzone onFileSelect={handleFileSelect} />
+              <AnimatePresence mode="wait">
+                {uploadMode === "image" ? (
+                  <motion.div
+                    key="dropzone"
+                    initial={{ opacity: 0, x: -20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    exit={{ opacity: 0, x: 20 }}
+                  >
+                    <Dropzone onFileSelect={handleFileSelect} />
+                  </motion.div>
+                ) : (
+                  <motion.div
+                    key="url-input"
+                    initial={{ opacity: 0, x: -20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    exit={{ opacity: 0, x: 20 }}
+                  >
+                    <UrlInput onUrlSubmit={handleUrlSubmit} />
+                  </motion.div>
+                )}
+              </AnimatePresence>
+
               {previewUrl && (
                 <motion.div
                   initial={{ opacity: 0, scale: 0.95 }}
@@ -76,11 +108,13 @@ export function UploadPage() {
                   </div>
                 </motion.div>
               )}
-              
+
               {!qrCodeUrl && (
                 <div className="flex items-center justify-center h-full">
                   <p className="text-gray-500 dark:text-gray-400 text-center">
-                    Upload an image to generate its QR code
+                    {uploadMode === "image"
+                      ? "Upload an image to generate its QR code"
+                      : "Enter an image URL to generate its QR code"}
                   </p>
                 </div>
               )}
