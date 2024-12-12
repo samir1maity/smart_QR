@@ -22,7 +22,7 @@ export function UploadPage() {
 
   const handleUrlSubmit = async (url: string) => {
     try {
-      const response = await axios.post("http://localhost:5000/generate", {
+      const response = await axios.post(`${import.meta.env.VITE_API_URL}/generate`, {
         data: url,
       });
       console.log("response", response);

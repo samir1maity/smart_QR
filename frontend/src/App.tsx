@@ -1,9 +1,9 @@
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import { Navbar } from './components/layout/Navbar';
-import { HomePage } from './screens/Homepage';
-import { LoginPage } from './screens/Login';
-import { SignupPage } from './screens/Signup';
-import { UploadPage } from './screens/Upload';
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { Navbar } from "./components/layout/Navbar";
+import { HomePage } from "./screens/Homepage";
+import { LoginPage } from "./screens/Login";
+import { SignupPage } from "./screens/Signup";
+import { UploadPage } from "./screens/Upload";
 
 function App() {
   return (
