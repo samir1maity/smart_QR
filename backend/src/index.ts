@@ -18,7 +18,6 @@ app.post("/generate", async (req: Request, res: Response): Promise<void> => {
 
   try {
     const qrCode = await QRCode.toDataURL(data);
-    console.log("qrCode", qrCode);
     res.send({ qrCode });
   } catch (err) {
     console.error(err);
