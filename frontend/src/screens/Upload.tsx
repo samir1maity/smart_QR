@@ -10,8 +10,9 @@ import axios from "axios";
 export function UploadPage() {
   const [uploadMode] = useState<"image" | "url">("url");
   // const [selectedFile, setSelectedFile] = useState<File | null>(null);
-  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+  // const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const [qrCodeUrl, setQrCodeUrl] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   // const handleFileSelect = (file: File) => {
   //   setSelectedFile(file);
@@ -22,14 +23,30 @@ export function UploadPage() {
 
   const handleUrlSubmit = async (url: string) => {
     try {
-      const response = await axios.post(`${import.meta.env.VITE_API_URL}/generate`, {
-        data: url,
-      });
-      console.log("response", response);
-      setPreviewUrl(url);
+      setIsLoading(true);
+      setQrCodeUrl('')
+      const response = await axios.post(
+        `${import.meta.env.VITE_API_URL}/generate`,
+        {
+          data: url,
+        }
+      );
       setQrCodeUrl(response.data.qrCode);
     } catch (error) {
       alert("Failed to generate QR code");
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleDownload = () => {
+    if (qrCodeUrl) {
+      console.log("qrCodeUrl", qrCodeUrl);
+      const link = document.createElement("a");
+      link.href = qrCodeUrl;
+      link.download = "qr-code.png"; // Set the filename for the download
+      console.log("link.download", link.download);
+      link.click();
     }
   };
 
@@ -76,7 +93,7 @@ export function UploadPage() {
                 )}
               </AnimatePresence>
 
-              {previewUrl && (
+              {/* {previewUrl && (
                 <motion.div
                   initial={{ opacity: 0, scale: 0.95 }}
                   animate={{ opacity: 1, scale: 1 }}
@@ -88,7 +105,7 @@ export function UploadPage() {
                     className="w-full h-full object-cover"
                   />
                 </motion.div>
-              )}
+              )} */}
             </div>
 
             <div className="space-y-6">
@@ -108,25 +125,31 @@ export function UploadPage() {
                     <img src={qrCodeUrl} />
                   </div>
                   <div className="flex gap-4">
-                    <Button className="flex-1">
+                    <Button className="flex-1" onClick={handleDownload}>
                       <Download className="w-4 h-4 mr-2" />
                       Download QR
                     </Button>
-                    <Button variant="outline" className="flex-1">
+                    {/* <Button variant="outline" className="flex-1">
                       <Share2 className="w-4 h-4 mr-2" />
                       Share
-                    </Button>
+                    </Button> */}
                   </div>
                 </motion.div>
               )}
 
-              {!qrCodeUrl && (
+              {!qrCodeUrl && !isLoading && (
                 <div className="flex items-center justify-center h-full">
                   <p className="text-gray-500 dark:text-gray-400 text-center">
                     {uploadMode === "image"
                       ? "Upload an image to generate its QR code"
                       : "Enter an image URL to generate its QR code"}
                   </p>
+                </div>
+              )}
+
+              {isLoading && (
+                <div className="flex items-center justify-center h-full">
+                  Loading...
                 </div>
               )}
             </div>
