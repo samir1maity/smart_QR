@@ -13,9 +13,6 @@ app.post("/generate", async (req: Request, res: Response): Promise<void> => {
   if (!data) {
     res.status(400).send({ error: "Data is required" });
   }
-  console.log("data", data);
-  const url = `http://localhost:3000/display?data=${encodeURIComponent(data)}`;
-
   try {
     const qrCode = await QRCode.toDataURL(data);
     res.send({ qrCode });
